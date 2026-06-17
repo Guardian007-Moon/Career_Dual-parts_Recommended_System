@@ -22,15 +22,22 @@ export interface ForwardResponse {
   student_grades: Record<string, StudentGrade>;
 }
 
-export interface CourseSimilarity {
+export interface GradeTarget {
   course: string;
-  similarity: number;
+  target: number;
+  importance_pct: number;
+  letter: string;
 }
 
 export interface ReverseResponse {
   role: string;
-  top_similarity: number;
-  courses: CourseSimilarity[];
+  regularization_lambda: number;
+  residual_norm: number;
+  total_grade_mass: number;
+  fit_if_achieved: number;
+  solver_status: number;
+  solver_message: string;
+  grade_targets: GradeTarget[];
   top_job_skills: StudentSkill[];
 }
 

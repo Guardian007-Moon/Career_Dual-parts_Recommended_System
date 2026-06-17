@@ -110,6 +110,26 @@ function BackwardIllustration() {
   );
 }
 
+function ReverseIllustration() {
+  return (
+    <svg viewBox="0 0 120 120" fill="none" className="w-16 h-16">
+      <rect x="10" y="10" width="100" height="100" rx="20" fill="url(#cardGrad3)" />
+      <path d="M30 85l20-25 15 10 25-35" stroke="#a78bfa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <circle cx="30" cy="85" r="4" fill="#8b5cf6" />
+      <circle cx="50" cy="60" r="4" fill="#a78bfa" />
+      <circle cx="65" cy="70" r="4" fill="#c4b5fd" />
+      <circle cx="90" cy="35" r="4" fill="#ddd6fe" />
+      <rect x="22" y="95" width="60" height="5" rx="2.5" fill="#8b5cf6" opacity="0.15" />
+      <defs>
+        <linearGradient id="cardGrad3" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(167,139,250,0.08)" />
+          <stop offset="100%" stopColor="rgba(139,92,246,0.04)" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 /* ── Page ── */
 
 export default function Home() {
@@ -156,6 +176,12 @@ export default function Home() {
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.5 21l.5-.25m8-14.5l.5-.25M12 21V9" />
                 </svg>
+                Try Reverse Mapping
+              </Link>
+              <Link href="/backward" className="btn-ghost px-8 py-3.5 text-sm flex items-center gap-2.5">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                </svg>
                 Try Backward Mapping
               </Link>
             </div>
@@ -169,7 +195,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════ FEATURE CARDS ═══════════════ */}
-      <section className="grid gap-5 sm:grid-cols-2 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
         <Link href="/forward" className="glass-card group p-8 cursor-pointer">
           <div className="flex items-start gap-5">
             <div className="shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
@@ -191,6 +217,26 @@ export default function Home() {
         </Link>
 
         <Link href="/reverse" className="glass-card group p-8 cursor-pointer">
+          <div className="flex items-start gap-5">
+            <div className="shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+              <ReverseIllustration />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="text-lg font-bold text-[var(--text-primary)] mb-1.5">Reverse Mapping</h2>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                Pick a target job role and use optimization to discover which courses matter most — with recommended grade targets for each.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-purple-500 transition-all group-hover:text-purple-400 group-hover:gap-3">
+                Get started
+                <svg className="h-4 w-4 transition-transform group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </Link>
+
+        <Link href="/backward" className="glass-card group p-8 cursor-pointer sm:col-span-2 lg:col-span-1">
           <div className="flex items-start gap-5">
             <div className="shrink-0 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
               <BackwardIllustration />
@@ -378,6 +424,92 @@ export default function Home() {
           <div className="mt-6 flex justify-end">
             <Link href="/reverse" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-500 transition-all hover:text-blue-400 hover:gap-3 group/link">
               Try Backward Mapping
+              <svg className="h-4 w-4 transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ REVERSE MAPPING STEPS ═══════════════ */}
+      <section className="animate-fade-in-up" style={{ animationDelay: "400ms" }}>
+        {/* ── Reverse Mapping Steps ── */}
+        <div className="glass-card p-8 sm:p-10 group">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/15">
+              <svg className="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.5 21l.5-.25m8-14.5l.5-.25M12 21V9" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-[var(--text-primary)]">Reverse Mapping</h3>
+              <p className="text-sm text-[var(--text-secondary)]">Find the best courses for your dream role.</p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              {
+                step: "01",
+                title: "Pick a target role",
+                desc: "Choose one of the 4 available job roles you're aiming for. The system will analyze which skills that role requires most.",
+                icon: (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                ),
+                color: "purple",
+              },
+              {
+                step: "02",
+                title: "Run the optimization",
+                desc: "Click 'Run Optimization' to solve the inverse problem — finding the ideal grade vector that best matches the role's skill profile.",
+                icon: (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                ),
+                color: "violet",
+              },
+              {
+                step: "03",
+                title: "See course priorities",
+                desc: "View all 28 courses ranked by importance, with recommended grade targets. The top course sets the benchmark — others scale relative to it.",
+                icon: (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                color: "emerald",
+              },
+            ].map((item) => (
+              <div key={item.step} className="relative rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 hover:border-[var(--border-hover)] hover:bg-[var(--bg-card-hover)] transition-all duration-300">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold ${
+                    item.color === 'purple' ? 'bg-purple-500/15 text-purple-500 border border-purple-500/20' :
+                    item.color === 'violet' ? 'bg-violet-500/15 text-violet-500 border border-violet-500/20' :
+                    'bg-emerald-500/15 text-emerald-500 border border-emerald-500/20'
+                  }`}>
+                    {item.step}
+                  </span>
+                  <span className={`${
+                    item.color === 'purple' ? 'text-purple-500' :
+                    item.color === 'violet' ? 'text-violet-500' :
+                    'text-emerald-500'
+                  }`}>
+                    {item.icon}
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-[var(--text-primary)] mb-1.5">{item.title}</h4>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex justify-end">
+            <Link href="/reverse" className="inline-flex items-center gap-2 text-sm font-semibold text-purple-500 transition-all hover:text-purple-400 hover:gap-3 group/link">
+              Try Reverse Mapping
               <svg className="h-4 w-4 transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>

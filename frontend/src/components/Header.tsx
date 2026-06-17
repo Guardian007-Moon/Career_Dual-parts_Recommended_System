@@ -48,7 +48,8 @@ export default function Header() {
 
         <nav className="flex items-center gap-1">
           <NavLink href="/forward">Forward</NavLink>
-          <NavLink href="/reverse">Backward</NavLink>
+          <NavLink href="/reverse">Reverse</NavLink>
+          <NavLink href="/backward">Backward</NavLink>
           <div className="ml-1 h-5 w-px bg-[var(--border)]" />
           <ThemeToggle />
         </nav>

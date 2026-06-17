@@ -45,6 +45,20 @@ class Scorer:
         denom = np.linalg.norm(a) * np.linalg.norm(b)
         return float(np.dot(a, b) / denom) if denom != 0 else 0.0
 
+    @staticmethod
+    def _numeric_to_letter(val):
+        if val >= 0.938: return 'A'
+        if val >= 0.875: return 'A−'
+        if val >= 0.812: return 'B+'
+        if val >= 0.75:  return 'B'
+        if val >= 0.688: return 'B−'
+        if val >= 0.625: return 'C+'
+        if val >= 0.562: return 'C'
+        if val >= 0.5:   return 'C−'
+        if val >= 0.25:  return 'D'
+        if val >= 0.125: return 'D−'
+        return '—'
+
     def forward(self, grades_dict):
         g = np.zeros(len(self.course_names))
         for cn, grade in grades_dict.items():
@@ -87,25 +101,55 @@ class Scorer:
             }
         }
 
-    def reverse(self, target_role):
+    def reverse(self, target_role, reg_lambda=0.1):
+        from scipy.optimize import minimize
+
         if target_role not in self.role_names:
             raise ValueError(f"Unknown role: {target_role}. Available: {self.role_names}")
 
         job_idx = self.role_names.index(target_role)
-        target = self.J[job_idx]
+        J_j = self.J[job_idx]
+        C_T = self.C.T
 
-        course_scores = []
+        def objective(g):
+            p = C_T @ g
+            residual = p - J_j
+            return float(np.dot(residual, residual) + reg_lambda * np.dot(g, g))
+
+        m = len(self.course_names)
+        g0 = np.ones(m) * 0.5
+        bounds = [(0.0, 1.0)] * m
+
+        result = minimize(objective, g0, method='L-BFGS-B', bounds=bounds, options={'maxiter': 2000, 'ftol': 1e-9})
+
+        if not result.success:
+            raise RuntimeError(f"NNLS solver failed: {result.message}")
+
+        g_star = result.x
+
+        grade_targets = []
+        max_target = float(np.max(g_star)) if np.max(g_star) > 0 else 1.0
         for i, cn in enumerate(self.course_names):
-            sim = self._cosine_sim(self.C[i], target)
-            if sim > 0.001:
-                course_scores.append({
-                    'course': cn,
-                    'similarity': round(sim, 4),
-                })
-        course_scores.sort(key=lambda x: -x['similarity'])
+            raw = float(g_star[i])
+            importance_pct = round(raw / max_target * 100, 1)
+            grade_targets.append({
+                'course': cn,
+                'target': round(raw, 4),
+                'importance_pct': importance_pct,
+                'letter': self._numeric_to_letter(raw / max_target) if max_target > 0 else '—',
+            })
+        grade_targets.sort(key=lambda x: -x['target'])
+
+        p_star = C_T @ g_star
+        residual_norm = float(np.linalg.norm(p_star - J_j))
+        total_grade_mass = float(np.sum(g_star))
+        max_p = C_T @ np.ones(len(self.course_names))
+        fit_if_achieved = round(
+            float(np.dot(p_star, J_j)) / float(np.dot(max_p, J_j)) * 100, 1
+        ) if float(np.dot(max_p, J_j)) > 0 else 0.0
 
         job_skills = sorted(
-            zip(self.skill_names, target),
+            zip(self.skill_names, J_j),
             key=lambda x: -x[1]
         )[:10]
         top_job_skills_list = [
@@ -115,9 +159,14 @@ class Scorer:
 
         return {
             'role': target_role,
-            'top_similarity': round(course_scores[0]['similarity'] if course_scores else 0, 4),
-            'courses': course_scores,
-            'top_job_skills': top_job_skills_list
+            'regularization_lambda': reg_lambda,
+            'residual_norm': round(residual_norm, 4),
+            'total_grade_mass': round(total_grade_mass, 4),
+            'fit_if_achieved': fit_if_achieved,
+            'solver_status': result.status,
+            'solver_message': result.message,
+            'grade_targets': grade_targets,
+            'top_job_skills': top_job_skills_list,
         }
 
     def backward(self, grades_dict, target_role):
@@ -149,13 +198,13 @@ class Scorer:
         for i, cn in enumerate(self.course_names):
             if cn in taken_courses:
                 continue
-            impact = float(np.dot(self.C[i], J_j))
-            if impact < 0.001:
+            sim = self._cosine_sim(self.C[i], J_j)
+            if sim < 0.001:
                 continue
-            impact_pct = round(impact / max_fit * 100, 1) if max_fit > 0 else 0.0
+            impact_pct = round(sim * 100, 1)
             recommendations.append({
                 'course': cn,
-                'impact': round(impact, 4),
+                'impact': round(sim, 4),
                 'impact_pct': impact_pct,
             })
         recommendations.sort(key=lambda x: -x['impact'])
